@@ -16,6 +16,9 @@ notifications:
     on_success: always
     on_failure: always
 
+before_install:
+- pip install invoke
+
 install: inv dc.build
 script: inv dc.up
 after_success:
