@@ -17,7 +17,7 @@ notifications:
     on_failure: always
 
 before_install:
-- pip install invoke
+- pip install invoke requests
 
 install: inv dc.build
 script: inv dc.up
