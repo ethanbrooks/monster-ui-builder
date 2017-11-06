@@ -38,7 +38,6 @@ pushd $_
     curl -sSL -o Editable.Resporg.Form.pdf \
         http://ui.zswitch.net/Editable.Resporg.Form.pdf
     chmod 0777 *.pdf
-
 	popd
 
 
