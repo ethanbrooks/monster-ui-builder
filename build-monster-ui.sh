@@ -52,6 +52,8 @@ for app in ${MONSTER_APPS//,/ }; do
 		mkdir -p var/www/html/monster-ui/apps
 		mv /build/monster-ui/apps/$app $_
 
+		echo $(version-for $app) > var/www/html/monster-ui/apps/$app/VERSION
+
 		mkdir DEBIAN
 		tee DEBIAN/control <<EOF
 Package: monster-ui-app-$app
@@ -70,7 +72,7 @@ set -e
 
 case "\$1" in
 configure)
-	! getent passwd monster-ui > /dev/null 2&>1 && adduser --system --no-create-home --gecos "MonsterUI" --group monster-ui
+	! getent passwd monster-ui > /dev/null 2&>1 && adduser --system --no-create-home --gecos "MonsterUI" --group monster-ui || true
 	chown -R monster-ui: /var/www/html/monster-ui/apps/$app
 	;;
 esac
@@ -90,6 +92,8 @@ pushd $_
 	mkdir -p var/www/html
 	mv /build/monster-ui $_
 
+	echo $MONSTER_UI_VERSION > var/www/html/monster-ui/VERSION
+
 	mkdir DEBIAN
 	tee DEBIAN/control <<EOF
 Package: monster-ui
@@ -107,7 +111,7 @@ set -e
 
 case "\$1" in
 configure)
-! getent passwd monster-ui > /dev/null 2&>1 && adduser --system --no-create-home --gecos "MonsterUI" --group monster-ui
+! getent passwd monster-ui > /dev/null 2&>1 && adduser --system --no-create-home --gecos "MonsterUI" --group monster-ui || true
 chown -R monster-ui: /var/www/html/monster-ui
 ;;
 esac
