@@ -26,7 +26,8 @@ apt-get update -qq
 apt-get install -y apt-transport-https
 
 apt-key adv --recv 04DFE96608062553B3701F2E7CA7320BE23F8CA8
-echo "deb https://dl.bintray.com/telephoneorg/monster-ui-builder/ stretch main" > /etc/apt/sources.list.d/telephone-org.list
+echo "deb https://dl.bintray.com/telephoneorg/monster-ui-builder stretch main" | tee /etc/apt/sources.list.d/telephone-org.list
+
 apt-get update
 
 apt-get install -y monster-ui monster-ui-*
