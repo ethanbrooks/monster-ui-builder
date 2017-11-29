@@ -16,7 +16,7 @@ notifications:
     on_success: always
     on_failure: always
 
-before_install: pip install --upgrade docker-compose requests invoke pyyaml
+before_install: pip install --upgrade docker-compose requests invoke pyyaml tmpld
 
 install:
 - inv dc.build
@@ -30,9 +30,7 @@ after_success:
 - inv hub.push
 - inv hub.update-readme
 
-before_deploy:
-- pip install tmpld
-- inv tmpl.render
+before_deploy: inv tmpl.render
 
 deploy:
 - provider: bintray
