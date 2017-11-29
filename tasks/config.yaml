@@ -1,0 +1,12 @@
+project: monster-ui-builder
+repo: monster-ui-builder
+hub:
+  images:
+  - monster-ui-builder
+ci:
+  package:
+    name: monster-ui
+tmpl:
+  glob: templates/*.j2
+  values:
+  - config.yaml

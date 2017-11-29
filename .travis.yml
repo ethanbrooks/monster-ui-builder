@@ -1,9 +1,9 @@
 language: python
+python:
+- "3.6"
 services: docker
 env:
   global:
-  - DOCKER_USER=joeblackwaslike
-  - DOCKER_ORG=telephoneorg
   - secure: "G0dGupw7piQv8pJoic4rJAlDZAAqgvLJjeo3it8tMLBw1sw7+zIUSKWTaqMuMX5pWgiaqI7/vsfjQ7eIvvbZ0l+CNtZNBe0ZJxyOf8lV9FjiF2TlLcZIlyXrM6mOCqcl8Z08aGoB2FEugxlmn8JmvxDRTKmsQJCUj4noSHQ9EJg9XQS+bpSZINFqkqPicIJXtVprevWw1d9VfvOo1lqvtMthyGnO6aYSt4BPkO3E+FJaIIVJdqvusIkkrjfqP5myG23ajfk2/z5zAoHzYM9p9iEW7q4rq5MibgBvhq4hvxQcb5XppXVTmFR13B0Us4LatkNAtxaT+Ae//JkMLoAeqGVQixltLnAmlGqWa16O+qdk7vX1omoNCntnLKlkepoYS7832OC6kSX6VZtsJWuC3H3RYfvJiUp42iXzGDXlg4U6Tzh+q3YF5ElTSqWv0T3yG+F2Anx14oWtOUdNrRUJ/RdWQG8NZdLBTMH/a6aNNZrp/tfp0PKNRJ9TmmsnrY2iTO+QGyOhVNi8uoR2uswGEAb6YV0ZLnc++lFvT+acO3fHZoz/HnFFF/hAwZPi6yBkPwJ5Ki8D5IzRbwIAAAExFDKFb2xxsl3BKWolS+gtgBw8tDHMJpocMQpotjvswyh21uXCtsJtSADBUcqenBc9VdCjPfa2lhqk38v1VkGEMNw="
 
 notifications:
@@ -16,18 +16,37 @@ notifications:
     on_success: always
     on_failure: always
 
-before_install:
-- pip install invoke requests
-- pip install --upgrade docker-compose
+before_install: pip install --upgrade docker-compose requests invoke pyyaml
 
-install: inv dc.build
-script: inv dc.up
+install:
+- inv dc.build
+- inv dc.up
+
+script: true
+# inv test
+
 after_success:
+- inv ci.tag-build
 - inv hub.push
 - inv hub.update-readme
 
+before_deploy:
+- pip install tmpld
+- inv tmpl.render
+
 deploy:
-  provider: releases
+- provider: bintray
+  file: descriptor.json
+  user: telephoneorg
+  key:
+    secure: "SClYz87yg3NQRuR2JXJdiF9DmkJt7y1AiiPbkpJnQuFPOs4SN6JWuxZAKjwOoMYVwsRI2TfGkSTDyqZLm2+e52/iPdnEUz4cu76FEHiUWH5UorGhbeTgNcOEzg5WW9Qg8IrBxwygUZe1RS6y2WJpir1QQA8kajosCO2xCN7KOaMbj0eDk/Ordk8v8VUDDADjPGq6n1TBXIM/S1b378W8yN7ik3aaV+/rhVvKLST4yKC7hP9ZQOpCsPqp+qdMYk6zE8p4zvcXtUsjgkzobp3mqV94Pr62zwybULTuf3bP5wtOYAe7BqQxyeeici/SkKANmkTlV9YfHPKsZstfvAYUdS+d/NBno9U43qSHu6TKTlc6/sBhTivBQcXfCCG5ryTis1eFM8Bq45BId42LNOD5GaE16EN1eq3+45WdmQJkUXoUK2PJVlQlqG7ffRNAgswKqRzK4DmQY9JDqcEpmSUmkarOHcD0GFNhksEaYwRtG0+UgPZZaixAZrbK0JRR9tK1q9xKW0T/8MhLgjikZdWw/RB43jr5GSqk/R1+ZmF6s1pTMdZ5EUY7oSotC3t3BQOQX9l54L3tn7n1GJyy0eByZU/wQLJDECiQitMAeUqfgekJJHQ2TPfmhQRA0VsqOQZGfSsOEVLG8D6bbhV6tHgqP4Epb9fBEJHfch257CTNIl4="
+  passphrase:
+    secure: "isMvb/fHbofW7UXGqmZOqdLZiCydqnuMX7uSrxGYFsVPL7Z029DizvzKLcs0ItYZBKEeswqN4/k6fBLWlctAEf0p5lZU2HKg6lu+awFkZprM3oMx2CokXGU57iNoxUjydMTL70MFZUrQO33QRr2GLNMYjwqRXkgOqBgZWDlMkGmeUaev7YpES7tPBn7DPzu8uyOrm/5j0TEEMnnYFQT31lPVBWkknHxhuH0LfJDgC4m0GdQ0IvW/owgXDJrDC33nzkrwksoBN2AyGLap+atpdIpC9mnlpL4whHTZu+MHHduvCiiQORX7ND+KnYReOjq0AbEAEbGmNj44P6egEeWF9pIpp9H1UUNElEQ0XjVX+SDXZZpC4TT+24n8jvpwdzJc8KLobEtDbA+LHx7kgL2UnthbrAim9vEu1NnHhwcHvw10AHasSb6kNuVPOH72B7vnLP5L3DsV/8FXs4UF6kEP5A1iITBxCiGm0b19xoOnBmEz48MbIMvB3eNWk8ImgZ4H8e/P/0E6aSzQrUf14+xdm2EDwNl0FrO3hd8WHnTvoH5aa5UMdgnt6laA8HWbeKI20oyJVkvAl4rWy7X6dGifVbTP1GqG02ysnLmDT50IyG8etskITnqgV3jodLq7OQ/IoeHSqlUMLehzNDF+26oaL+klVr2PSgQFGDVehU6qKXs="
+  skip_cleanup: true
+  on:
+    repo: telephoneorg/monster-ui-builder
+    tags: true
+- provider: releases
   api_key:
     secure: hVL+O9xKNfu/XEZPrr2I+5NV8EeYlPX92Z1nuXYuSJS7qARfJbZbtRRo4LpPzCs2CEvdSMJoTpvVhFx2ZTO2tyJ5+ipDYdBRggQmNqSYTjPulElF2fMHErd9Q3YgByNU7BbsmZhqT7fE0DiEtVjx7a9Z09S//8ZoCnjRE+/XTrky97H7cXEl/60duPK6Hn/dJvtr2YmBvtymo8TJO7tHJSEii0kIDYzPXRAZ8ZMXtVCrkiwFcACx5KUOMT8LQJp+Z1wMeyxR0XUFLeQGhkGxxZL7iHsumPjJj7XpONwpfnkQHd84047CDE5CjgN/6KyozpnbmMY6iEiCVJc+78/a1G+7gsGUrAgIH+k+/7VFEPO27MejWL0B0etGZpvKWqcvXE77VwL3TuX+ls6gihUMAR4e7u4q5VR2u9ggczgyujJX9ZZU0LQSAAdj/8lQJ7eEHzsJ6+kXafUCA2U4PHQhivpzKHw//WJQ8uvIgOutCJKVyxQlXRNZZ392w0V+5VPkklYHN7EJS+A4GVYR82ziWrVu3EdSut5QL5wB17lCLCAupJPCEkzNW4FcAyQmTRAjAfCx4h3Efi3GlxtDKO6xnzvRUniVSyCJTJlOOR0VQBsMk+FrW85IqymBW8SqRjV9LU6NAISLlwa63IWm5fd3Ow7MWIh7SQeaQShpboTyssE=
   file_glob: true
