@@ -26,19 +26,12 @@ target: descriptor.json
     },
     "files": [
         {
-            "includePattern": "dist/(.*\\.deb)",
+            "includePattern": "dist/(.*\\.deb|Release|Package.*)",
             "uploadPattern": "$1",
             "matrixParams": {
                 "deb_distribution": "stretch",
                 "deb_component": "main",
                 "deb_architecture": "amd64",
-                "override": 1
-            }
-        },
-        {
-            "includePattern": "dist/(Release|Package)",
-            "uploadPattern": "$1",
-            "matrixParams": {
                 "override": 1
             }
         }
