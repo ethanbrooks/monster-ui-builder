@@ -34,15 +34,14 @@ target: descriptor.json
                 "deb_architecture": "amd64",
                 "override": 1
             }
-        }
-    ],
-    "publish": true
-}
-
-        {# {
+        },
+        {
             "includePattern": "dist/(Release|Package)",
             "uploadPattern": "$1",
             "matrixParams": {
                 "override": 1
             }
-        } #}
+        }
+    ],
+    "publish": true
+}
