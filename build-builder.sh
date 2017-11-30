@@ -14,6 +14,7 @@ log::m-info "Installing build environment ..."
 apt-get -qq update
 
 apt-get install -yqq \
+    apt-utils \
     build-essential \
     ca-certificates \
     cpio \

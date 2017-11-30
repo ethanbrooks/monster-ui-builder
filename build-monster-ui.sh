@@ -131,3 +131,8 @@ mv /tmp/*.deb /dist
 log::m-info "Creating archive for debs ..."
 cd /dist
 	tar czvf monster-ui-debs-all.tar.gz *.deb
+
+	apt-ftparchive packages . > Packages
+	cd ..
+
+apt-ftparchive release /dist > /dist/Release

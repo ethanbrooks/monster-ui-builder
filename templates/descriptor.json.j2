@@ -27,21 +27,22 @@ target: descriptor.json
     "files": [
         {
             "includePattern": "dist/(.*\\.deb)",
-            "uploadPattern": "pool/main/m/$1",
+            "uploadPattern": "$1",
             "matrixParams": {
                 "deb_distribution": "stretch",
                 "deb_component": "main",
                 "deb_architecture": "amd64",
                 "override": 1
             }
-        },
-        {
-            "includePattern": "dist/(.*\\.tar\\.gz)",
-            "uploadPattern": "archives/$1",
-            "matrixParams": {
-                "override": 1
-            }
         }
     ],
     "publish": true
 }
+
+        {# {
+            "includePattern": "dist/(Release|Package)",
+            "uploadPattern": "$1",
+            "matrixParams": {
+                "override": 1
+            }
+        } #}
