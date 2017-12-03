@@ -38,6 +38,11 @@ pushd $_
     curl -sSL -o Editable.Resporg.Form.pdf \
         http://ui.zswitch.net/Editable.Resporg.Form.pdf
     chmod 0777 *.pdf
+
+	# provides: https://my.telephone.org/js/vendor/lodash-4.17.4.js
+	curl -sSL -o js/vendor/lodash-4.17.4.js \
+		https://raw.githubusercontent.com/lodash/lodash/4.17.4/dist/lodash.js
+
 	popd
 
 
