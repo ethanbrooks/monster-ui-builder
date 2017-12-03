@@ -125,11 +125,43 @@ EOF
 
 
 log::m-info "Moving debs to /dist ..."
+
 mv /tmp/*.deb /dist
+	pushd /dist
+	tar czvf monster-ui-debs-all.tar.gz *.deb
+
+# mkdir -p /dist/dists/stretch/main/binary-amd64
+# mkdir -p /dist/pool/main/m
+#
+# cd /dist
+# 	mv /tmp/*.deb /dist/pool/main/m
+# 	apt-ftparchive packages . > dists/stretch/main/binary-amd64/Packages
+# 	apt-ftparchive release . >  dists/stretch/Release
+#
+# 	# tar czvf /repo.tar.gz .
+# 	mv /repo.tar.gz /dist
+
+# mv /tmp/*.deb /dist
+#
+#
+# log::m-info "Creating archive for debs ..."
+# cd /dist
+# 	# tar czvf monster-ui-debs-all.tar.gz *.deb
+# 	apt-ftparchive packages . > Packages
+# 	apt-ftparchive release . > Release
 
 
-log::m-info "Creating archive for debs ..."
-cd /dist
-	# tar czvf monster-ui-debs-all.tar.gz *.deb
-	apt-ftparchive packages . > Packages
-	apt-ftparchive release . > Release
+#
+# dist/
+#     dists/
+#         stretch/
+#             main/
+#                 binary-amd64/
+#                     Packages
+#             Release
+#             Release.gpg
+#     pool/
+#         main/
+#             m/
+#                 deb
+#                 debs.asc
