@@ -14,7 +14,7 @@ ARG     MONSTER_APP_VOICEMAILS_VERSION
 ARG     MONSTER_APP_WEBHOOKS_VERSION
 ARG     NODE_VERSION
 
-ENV     MONSTER_UI_VERSION=${MONSTER_UI_VERSION:-4.1.53}
+ENV     MONSTER_UI_VERSION=${MONSTER_UI_VERSION:-4.1.56}
 ENV     MONSTER_APPS=${MONSTER_APPS:-accounts,callflows,fax,numbers,pbxs,voip,voicemails,webhooks}
 ENV     MONSTER_APP_ACCOUNTS_VERSION=${MONSTER_APP_ACCOUNTS_VERSION:-4.1.6}
 ENV     MONSTER_APP_CALLFLOWS_VERSION=${MONSTER_APP_CALLFLOWS_VERSION:-4.1.36}
@@ -48,5 +48,6 @@ RUN     /tmp/build-builder.sh
 VOLUME  ["/dist"]
 
 COPY    build-monster-ui.sh /
+COPY    patches /build/patches
 
 CMD     ["/build-monster-ui.sh"]

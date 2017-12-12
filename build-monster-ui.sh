@@ -15,6 +15,10 @@ log::m-info "Installing Monster-UI v$MONSTER_UI_VERSION"
 git clone -b $MONSTER_UI_VERSION --single-branch --depth 1 \
     https://github.com/2600hz/monster-ui monster-ui
 pushd $_
+	log::m-info "Applying patches ..."
+	# mv /build/patches .
+	git apply /build/patches/*.diff
+
 	log::m-info  "Installing monster-ui apps ..."
     pushd src/apps
         for app in ${MONSTER_APPS//,/ }; do
